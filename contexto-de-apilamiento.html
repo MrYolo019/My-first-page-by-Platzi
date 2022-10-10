@@ -12,6 +12,23 @@
             --magic-mint: #A4F9C8;
             --shapire-blue: #28536B;
         }
+        .page{
+            position: relative;
+            height: 100vh;
+            width: 100%;
+        }
+        .container{
+            position: absolute;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 55% 45%;
+            grid-template-rows: 20% 50% 30%;
+            grid-template-areas: 'nav     aside'
+                                 'section aside'
+                                 'footer aside';
+            height: 100%;
+            width: 100%;   
+        }
         body{
             font-family: 'Lato', sans-serif;
             height: 100vh;
@@ -144,7 +161,49 @@
             justify-content: center;
             position: absolute;
             z-index: 3;
-            animation: loader 0.5s linear forwards;
+            animation: loader 2s linear forwards;
+        }
+        .footer{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            background: var(--plum-web);
+            border-radius: 0 80px 0 0;
+            transform: translateY(100%);
+
+            animation-name: footer;
+            animation-duration: 0.5s;
+            animation-delay: 2.5s;
+            animation-timing-function: ease-in-out;
+            animation-fill-mode: forwards;
+        }
+        @keyframes footer{
+            0%{
+                transform: translateY(100%);
+            }
+            100%{
+                transform: translateY(0%);
+            }
+        }
+        .footer div{
+            background: white;
+            width: 160px;
+            height: 50%;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+        }
+        .footer div img{
+            width: 160px;
+            /* position: absolute;
+            bottom: 30px; */
+            transform: translateY(0px) scale(1);
+            transition: transform 0.5s ease-in-out;
+        }
+        .footer div:hover img{
+            cursor: pointer;
+            transform: translateY(-20px) scale(1.1);
+            transition: transform 0.3s ease-in-out;
         }
         .loader div{
             background-color: var(--magic-mint);
@@ -190,22 +249,70 @@
                 visibility: hidden;
             }
         }
-        .page{
-            position: relative;
-            height: 100vh;
-            width: 100%;
+        .hidden{
+            display: none !important;
         }
-        .container{
-            position: absolute;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: 55% 45%;
-            grid-template-rows: 20% 50% 30%;
-            grid-template-areas: 'nav     aside'
-                                 'section aside'
-                                 'footer aside';
+        .visible{
+            display: grid !important;
+        }
+        .modal{
+            width: 100%;
             height: 100%;
-            width: 100%;   
+            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            z-index: 4;
+            display: grid;
+            place-items: center;
+        }
+        .modal-content{
+            background: white;
+            width: 50%;
+            height: 50%;
+            place-items: center;
+        }
+        .modal__content--slider{
+            width: 300px;
+            height: 200px;
+            transform-style: preserve-3d;
+        }
+        .card{
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .card{
+            height: 100%;
+            width: 50%;
+            background: var(--plum-web);
+            position: absolute;
+            right: 0;
+            left: 0;
+            margin: 0 auto;
+            transition: transform 0.5s ease;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+        }
+        #radio-1:checked ~ .cards #card-1,
+        #radio-2:checked ~ .cards #card-2,
+        #radio-3:checked ~ .cards #card-3{
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            z-index: 1;
+        }
+        #radio-1:checked ~ .cards #card-2,
+        #radio-2:checked ~ .cards #card-3,
+        #radio-3:checked ~ .cards #card-1{
+            transform: translateX(40%) scale(0.8);
+            opacity: 0.5;
+            z-index: 0;
+        }
+        #radio-1:checked ~ .cards #card-3,
+        #radio-2:checked ~ .cards #card-1,
+        #radio-3:checked ~ .cards #card-2{
+            transform: translateX(-40%) scale(0.8);
+            opacity: 0.5;
+            z-index: 0;
         }
     </style>
 </head>
@@ -238,15 +345,15 @@
                 <img src="./Images/Fire_Slime_SP.jpg" alt="Slime de fuego">
             </section>
 
-            <section>
-                <div>
-                    <img src="" alt="">
+            <section class="footer">
+                <div id="button1">
+                    <img src="./Images/Rad_Slime_SP.jpg" alt="Slime radioactivo">
                 </div>
-                <div>
-                    <img src="" alt="">
+                <div id="button2">
+                    <img src="./Images/Crystal_Slime_SP.jpg" alt="Slime de cristal">
                 </div>
-                <div>
-                    <img src="" alt="">
+                <div id="button3">
+                    <img src="./Images/Boom_Slime_SP.jpg" alt="Slime explosivo">
                 </div>
             </section>
         </section>
@@ -257,7 +364,53 @@
             <div></div>
         </section>
         <!-- Modal -->
-        <section></section>
+        <section class="modal hidden">
+            <div class=" modal-content">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABuElEQVRIidXVv24TQRAG8B+2EgRxEKBQoMSBgoImMkaUJB0Nz8CTEErIk+RJSMEfCQlRgARUwYHQEIIDSEYCip1Lzpc923GXTzrpNLPzzXw7s7ucdpwZ429gKb5LOB/2X9hDL76/0yRo4xZaY4o4wGt8yjmbNUm7uI3ZMeRizTJm8HWSBF3cnIC4ioXg2x2VoC1VPi2u4Dt+FIZGydmQ9ryMOdyX70MrfHMVe7fMW1bQxo3K4nt4gA5eYBD2eTzCKvbxsRQzG7b9qoKlTJVPsS01cT2I5+N/OXxbmbjFnIIOzlYWDvAMK7iOO1gLtdt4Io1pFQ18qCo4l1kIP7ERhFejup0g79fEFAdyKMEoNB0fiNyIF/iXS/C7ZvEFPJR61HOkZB0Xa2IOucpVLGQCWoYb+lhqakfqwwqeO5quAl+imCEFvUwlayXyYs/78V9M12om7pCrrKCPa4Yn6bN0MjcNT8sgKt8LRX9KvgO8En2o3qZt3M1UdBJsqVFAukNmpH5Mg7di/usSkK7cpnRxnQTv8KZqrJvlXWnvLzt+uqvo4yXe55yTPpmLkaz8ZH6T9nrHiCfz9OM/DB5Wa4BvV1MAAAAASUVORK5CYII=" class="modal-content-close">
+                <div class="modal__content--slider">
+                    <input type="radio" name="slider-1" id="radio-1" checked>
+                    <input type="radio" name="slider-1" id="radio-2">
+                    <input type="radio" name="slider-1" id="radio-3">
+
+                    <div class="cards">
+                        <label for="radio-1" id="card-1" class="card">
+                            <img src="" alt="">            
+                        </label>
+                        <label for="radio-2" id="card-2" class="card">
+                            <img src="" alt="">
+                        </label>
+                        <label for="radio-3" id="card-3" class="card">
+                            <img src="" alt="">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
+<script>
+    const modal = document.querySelector('.modal')
+    const button1 = document.querySelector('#button1')
+    const button2 = document.querySelector('#button2')
+    const button3 = document.querySelector('#button3')
+    const close = document.querySelector('.modal-content-close')
+
+    button1.addEventListener('click', () => {
+        modal.classList.remove('hidden')
+        modal.classList.add('visible')
+    })
+    button2.addEventListener('click', () => {
+        modal.classList.remove('hidden')
+        modal.classList.add('visible')
+    })
+    button3.addEventListener('click', () => {
+        modal.classList.remove('hidden')
+        modal.classList.add('visible')
+    })
+
+    close.addEventListener('click', () => {
+        modal.classList.remove('visible')
+        modal.classList.add('hidden')
+    })
+</script>
 </html>
